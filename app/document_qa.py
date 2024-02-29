@@ -5,14 +5,13 @@ from config import CONFIG
 
 # # Huggingface embedding setup
 hf = setup_embeddings()
-db, url = setup_vectordb(hf, CONFIG.index_name)
 llm_chain_informed = make_the_llm()
-load_document_embedding(CONFIG.source_path, url, hf, CONFIG.index_name)
+elastic_vector_search = load_document_embedding(CONFIG.source_path, hf, CONFIG.index_name)
 
 
 # ## how to ask a question
 def ask_a_question(question):
-    similar_docs = db.similarity_search(question)
+    similar_docs = elastic_vector_search.similarity_search(question)
     print(f"The most relevant passage: \n\t{similar_docs[0].page_content}")
     informed_context = similar_docs[0].page_content
     response = llm_chain_informed.run(context=informed_context, question=question)

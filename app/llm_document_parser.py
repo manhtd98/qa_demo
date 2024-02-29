@@ -1,9 +1,10 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import TextLoader
+from langchain_elasticsearch import ElasticsearchStore
 
 ## for vector store
-from langchain.vectorstores import ElasticVectorSearch
 from elasticsearch import Elasticsearch
+from config import CONFIG
 
 
 def parse_document(filepath):
@@ -29,11 +30,19 @@ def parse_triplets(filepath):
     return result
 
 
-def load_document_embedding(filepath, url, hf, index_name):
-    es = Elasticsearch([url])
+def load_document_embedding(filepath, hf, index_name):
+    url = f"https://{CONFIG.username}:{CONFIG.password}@{CONFIG.endpoint}:443"
+    elastic_vector_search = ElasticsearchStore(
+        embedding=hf,
+        es_url=url,
+        index_name=index_name,
+        strategy=ElasticsearchStore.ApproxRetrievalStrategy(
+            hybrid=True,
+        ),
+    )
 
     ## Parse the document if necessary
-    if not es.indices.exists(index=index_name):
+    if not elastic_vector_search.indices.exists(index=index_name):
         print(f"\tThe index: {index_name} does not exist")
         print(">> 1. Chunk up the Source document")
 
@@ -41,12 +50,16 @@ def load_document_embedding(filepath, url, hf, index_name):
 
         print(">> 2. Index the chunks into Elasticsearch")
 
-        elastic_vector_search = ElasticVectorSearch.from_documents(
+        elastic_vector_search = ElasticsearchStore.from_documents(
             docs,
             embedding=hf,
-            elasticsearch_url=url,
+            es_url=url,
             index_name=index_name,
-            # ssl_verify = ssl_verify
+            strategy=ElasticsearchStore.ApproxRetrievalStrategy(
+                hybrid=True,
+            ),
         )
     else:
         print("\tLooks like the document is already loaded, let's move on")
+
+        return elastic_vector_search
