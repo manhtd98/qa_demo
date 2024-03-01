@@ -17,17 +17,17 @@ def parse_document(filepath):
 
 def parse_triplets(filepath):
     docs = parse_document(filepath)
-    result = []
-    for i in range(len(docs) - 2):
-        concat_str = (
-            docs[i].page_content
-            + " "
-            + docs[i + 1].page_content
-            + " "
-            + docs[i + 2].page_content
-        )
-        result.append(concat_str)
-    return result
+    # result = []
+    # for i in range(len(docs) - 2):
+    #     concat_str = (
+    #         docs[i].page_content
+    #         + " "
+    #         + docs[i + 1].page_content
+    #         + " "
+    #         + docs[i + 2].page_content
+    #     )
+    #     result.append(concat_str)
+    return docs
 
 
 def load_document_embedding(filepath, hf, index_name):

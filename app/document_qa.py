@@ -20,6 +20,6 @@ def ask_a_question(question):
 
 
 if __name__ == "__main__":
-    command = "User Question>> "
+    command = "User Question>> What's twenty-seven times the most borrowed?"
     response = ask_a_question(command)
     print(f"\n\n Answer: {response}\n")
