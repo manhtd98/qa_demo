@@ -1,0 +1,4 @@
+transformers
+langchain
+langchain_elasticsearch
+sentence_transformers

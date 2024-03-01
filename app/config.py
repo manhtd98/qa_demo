@@ -24,11 +24,11 @@ class CONFIG:
     cache_dir = "./cache"
     index_name = "flan"
     model_id = "google/flan-t5-large"
-    source_path = "./"
+    source_path = "./data"
     embedding_model = "sentence-transformers/all-mpnet-base-v2"
-    endpoint = os.getenv("ES_SERVER", "ERROR")
-    username = os.getenv("ES_USERNAME", "ERROR")
-    password = os.getenv("ES_PASSWORD", "ERROR")
+    endpoint = os.getenv("ES_SERVER", "http://127.0.0.1:9200")
+    username = os.getenv("ES_USERNAME", "elastic")
+    password = os.getenv("ES_PASSWORD", "password")
     # ssl_verify = {
     #     "verify_certs": False,
     #     "basic_auth": (username, password),

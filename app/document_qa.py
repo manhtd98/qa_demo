@@ -1,5 +1,4 @@
 from llm_model import setup_embeddings, make_the_llm
-from llm_vectorstore import setup_vectordb
 from llm_document_parser import load_document_embedding
 from config import CONFIG
 
