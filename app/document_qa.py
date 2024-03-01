@@ -5,7 +5,9 @@ from config import CONFIG
 # # Huggingface embedding setup
 hf = setup_embeddings()
 llm_chain_informed = make_the_llm()
-elastic_vector_search = load_document_embedding(CONFIG.source_path, hf, CONFIG.index_name)
+elastic_vector_search = load_document_embedding(
+    CONFIG.source_path, hf, CONFIG.index_name
+)
 
 
 # ## how to ask a question

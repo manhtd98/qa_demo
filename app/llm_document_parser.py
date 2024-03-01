@@ -31,18 +31,13 @@ def parse_triplets(filepath):
 
 
 def load_document_embedding(filepath, hf, index_name):
-    url = f"https://{CONFIG.username}:{CONFIG.password}@{CONFIG.endpoint}:443"
-    elastic_vector_search = ElasticsearchStore(
-        embedding=hf,
-        es_url=url,
-        index_name=index_name,
-        strategy=ElasticsearchStore.ApproxRetrievalStrategy(
-            hybrid=True,
-        ),
+    url = f"http://{CONFIG.username}:{CONFIG.password}@{CONFIG.endpoint}:9200"
+    es = Elasticsearch(
+        [url], basic_auth=("elastic", CONFIG.password), http_compress=True
     )
 
     ## Parse the document if necessary
-    if not elastic_vector_search.indices.exists(index=index_name):
+    if not es.indices.exists(index=index_name):
         print(f"\tThe index: {index_name} does not exist")
         print(">> 1. Chunk up the Source document")
 
@@ -61,5 +56,12 @@ def load_document_embedding(filepath, hf, index_name):
         )
     else:
         print("\tLooks like the document is already loaded, let's move on")
-
-        return elastic_vector_search
+        elastic_vector_search = ElasticsearchStore(
+            embedding=hf,
+            es_url=url,
+            index_name=index_name,
+            strategy=ElasticsearchStore.ApproxRetrievalStrategy(
+                hybrid=True,
+            ),
+        )
+    return elastic_vector_search
